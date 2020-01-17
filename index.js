@@ -22,6 +22,10 @@ Gs2File.prototype.setKeyCol = function (keyCol) {
     this._defaultKeyCol = keyCol;
 }
 
+Gs2File.prototype.setRemarkCol = function (remarkCol) {
+    this._defaulRemarkCol = remarkCol;
+}
+
 Gs2File.prototype.setFormat = function (format) {
     this._defaultFormat = format;
 }
@@ -37,12 +41,17 @@ Gs2File.prototype.save = function (outputPath, opts, cb) {
     opts = opts || {};
 
     var keyCol = opts.keyCol,
+        remarkCol = opts.remarkCol,
         valueCol = opts.valueCol,
         format = opts.format,
         encoding = opts.encoding;
 
     if (!keyCol) {
         keyCol = this._defaultKeyCol;
+    }
+
+    if (!remarkCol) {
+      remarkCol = this._defaulRemarkCol;
     }
 
     if (!valueCol) {
@@ -60,7 +69,7 @@ Gs2File.prototype.save = function (outputPath, opts, cb) {
         }
     }
 
-    this._reader.select(keyCol, valueCol).then(function (lines) {
+    this._reader.select(keyCol, valueCol, remarkCol).then(function (lines) {
         if (lines) {
             var transformer = Transformer[format || 'android'];
             self._writer.write(outputPath, encoding, lines, transformer, opts);

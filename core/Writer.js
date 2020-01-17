@@ -18,7 +18,6 @@ FileWriter.prototype.write = function (filePath, encoding, lines, transformer, o
     if (fs.existsSync(filePath)) {
         fileContent = fs.readFileSync(filePath, encoding);
     }
-
     var valueToInsert = this.getTransformedLines(lines, transformer);
 
     var output = transformer.insert(fileContent, valueToInsert, options);
@@ -45,7 +44,7 @@ FileWriter.prototype.getTransformedLines = function (lines, transformer) {
             if (line.isComment()) {
                 valueToInsert += transformer.transformComment(line.getComment());
             } else {
-                valueToInsert += transformer.transformKeyValue(line.getKey(), line.getValue());
+                valueToInsert += transformer.transformKeyValue(line.getKey(), line.getValue(), line.getRemark());
             }
         }
         if (i !== lines.length - 1 && !line.isEmpty()) {

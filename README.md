@@ -25,6 +25,7 @@ const properties = (value) => {
 }
 
 transformer.setKeyCol('KEY')
+transformer.setRemarksCol('Remarks')
 transformer.save('values/strings.xml', properties('NL'));
 transformer.save('values-fr/strings.xml', properties('FR'));
 ```

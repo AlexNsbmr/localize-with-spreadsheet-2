@@ -45,12 +45,12 @@ GSReader.prototype.fetchAllCells = function () {
     }
 }
 
-GSReader.prototype.select = function (keyCol, valCol) {
+GSReader.prototype.select = function (keyCol, valCol, remarkCol) {
     var deferred = Q.defer();
     var self = this;
 
     Q.when(self.fetchAllCells(), function (worksheets) {
-        var extractedLines = self.extractFromRawData(worksheets, keyCol, valCol);
+        var extractedLines = self.extractFromRawData(worksheets, keyCol, valCol, remarkCol);
         deferred.resolve(extractedLines);
     }).fail(function (error) {
         //console.error('Cannot fetch data');
@@ -59,24 +59,24 @@ GSReader.prototype.select = function (keyCol, valCol) {
     return deferred.promise;
 };
 
-GSReader.prototype.extractFromRawData = function (rawWorksheets, keyCol, valCol) {
+GSReader.prototype.extractFromRawData = function (rawWorksheets, keyCol, valCol, remarkCol) {
     var extractedLines = [];
     for (var i = 0; i < rawWorksheets.length; i++) {
-        var extracted = this.extractFromWorksheet(rawWorksheets[i], keyCol, valCol);
+        var extracted = this.extractFromWorksheet(rawWorksheets[i], keyCol, valCol, remarkCol);
         extractedLines.push.apply(extractedLines, extracted);
     }
 
     return extractedLines;
 }
 
-GSReader.prototype.extractFromWorksheet = function (rawWorksheet, keyCol, valCol) {
+GSReader.prototype.extractFromWorksheet = function (rawWorksheet, keyCol, valCol, remarkCol) {
     var results = [];
 
     var rows = this.flatenWorksheet(rawWorksheet);
 
     var headers = rows[0];
     if (headers) {
-        var keyIndex = -1, valIndex = -1;
+        var keyIndex = -1, valIndex = -1, remarkIndex = -1;
         for (var i = 0; i < headers.length; i++) {
             var value = headers[i];
             if (value == keyCol) {
@@ -85,14 +85,18 @@ GSReader.prototype.extractFromWorksheet = function (rawWorksheet, keyCol, valCol
             if (value == valCol) {
                 valIndex = i;
             }
+            if (value == remarkCol) {
+              remarkIndex = i;
+            }
         }
         for (var i = 1; i < rows.length; i++) {
             var row = rows[i];
             if (row) {
                 var keyValue = row[keyIndex];
                 var valValue = row[valIndex];
+                var remarkValue = row[remarkIndex];
 
-                results.push(new Line(keyValue, valValue));
+                results.push(new Line(keyValue, valValue, remarkValue));
             }
         }
     }
@@ -211,5 +215,3 @@ module.exports = {
     GS: GSReader,
     Fake: FakeReader
 }
-
-
