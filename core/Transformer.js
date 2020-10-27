@@ -15,6 +15,12 @@ var iOSTransformer = {
         normalizedValue = normalizedValue.replace(/"/gi, '\\"');
         normalizedValue = normalizedValue.replace(/%([@df])/gi, '%$1');
         normalizedValue = normalizedValue.replace(/%s/gi, "%@");
+
+        // Omit "new" remarks
+        if remark === "new" {
+            remark = ""
+        }
+
         var normalizedRemark = remark
         if (remark) { normalizedRemark = " // " + remark }
         
