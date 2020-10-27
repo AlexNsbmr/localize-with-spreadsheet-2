@@ -17,7 +17,7 @@ var iOSTransformer = {
         normalizedValue = normalizedValue.replace(/%s/gi, "%@");
 
         // Omit "new" remarks
-        if remark === "new" {
+        if (remark === "new") {
             remark = ""
         }
 
