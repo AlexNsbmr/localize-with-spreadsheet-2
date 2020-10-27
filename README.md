@@ -2,7 +2,7 @@
 
 
 ## Installation
-`npm install localize-with-spreadsheet-2`
+`npm install qoqa/localize-with-spreadsheet-2`
 
 ## Differences in version 2 (only major ones listed)
 - Preserve line breaks from the Google Sheets
